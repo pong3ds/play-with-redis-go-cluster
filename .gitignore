@@ -14,8 +14,6 @@
 vendor
 .DS_Store
 
-dockers
-
 main
 
 glide.lock

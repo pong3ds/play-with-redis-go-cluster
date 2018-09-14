@@ -1,30 +1,54 @@
-master1:
-  image: redis:3
-slave1:
-  image: redis:3
-  command: redis-server --slaveof redis-master 6379
-  links:
-    - master1:redis-master
-sentinel1:
-  build: sentinel
-  environment:
-    - SENTINEL_DOWN_AFTER=5000
-    - SENTINEL_FAILOVER=5000    
-  links:
-    - master1:redis-master
-    - slave1
-master2:
-  image: redis:3
-slave2:
-  image: redis:3
-  command: redis-server --slaveof redis-master 6379
-  links:
-    - master2:redis-master
-sentinel2:
-  build: sentinel
-  environment:
-    - SENTINEL_DOWN_AFTER=5000
-    - SENTINEL_FAILOVER=5000    
-  links:
-    - master2:redis-master
-    - slave2
+version: "2"
+services:
+  master1:
+    image: redis:3
+  slave1:
+    image: redis:3
+    command: redis-server --slaveof redis-master 6379
+    links:
+      - master1:redis-master
+  sentinel1:
+    build: sentinel
+    environment:
+      - SENTINEL_DOWN_AFTER=5000
+      - SENTINEL_FAILOVER=5000    
+    links:
+      - master1:redis-master
+      - slave1
+  master2:
+    image: redis:3
+  slave2:
+    image: redis:3
+    command: redis-server --slaveof redis-master 6379
+    links:
+      - master2:redis-master
+  sentinel2:
+    build: sentinel
+    environment:
+      - SENTINEL_DOWN_AFTER=5000
+      - SENTINEL_FAILOVER=5000    
+    links:
+      - master2:redis-master
+      - slave2
+  haproxy1:
+    image: haproxy:1.8
+    container_name: play-with-redis-haproxy1
+    depends_on:
+      - master1
+      - slave1
+      - sentinel1
+    ports: 
+      - 7000:6379
+    volumes: 
+      - ./dockers/haproxy1:/usr/local/etc/haproxy
+  haproxy2:
+    image: haproxy:1.8
+    container_name: play-with-redis-haproxy2
+    depends_on:
+      - master2
+      - slave2
+      - sentinel2
+    ports: 
+      - 7001:6379
+    volumes: 
+      - ./dockers/haproxy2:/usr/local/etc/haproxy

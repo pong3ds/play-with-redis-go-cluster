@@ -7,3 +7,4 @@ master2:
 master3:
   image: redis:3
   container_name: play-with-redis-master3
+
