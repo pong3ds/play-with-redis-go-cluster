@@ -1,0 +1,4 @@
+package: github.org/pong3ds/play-with-redis-go-cluster
+import:
+- package: github.com/3dsinteractive/redis-go-cluster
+  version: ^1.0.0

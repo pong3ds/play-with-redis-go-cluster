@@ -1,0 +1,30 @@
+master1:
+  image: redis:3
+slave1:
+  image: redis:3
+  command: redis-server --slaveof redis-master 6379
+  links:
+    - master1:redis-master
+sentinel1:
+  build: sentinel
+  environment:
+    - SENTINEL_DOWN_AFTER=5000
+    - SENTINEL_FAILOVER=5000    
+  links:
+    - master1:redis-master
+    - slave1
+master2:
+  image: redis:3
+slave2:
+  image: redis:3
+  command: redis-server --slaveof redis-master 6379
+  links:
+    - master2:redis-master
+sentinel2:
+  build: sentinel
+  environment:
+    - SENTINEL_DOWN_AFTER=5000
+    - SENTINEL_FAILOVER=5000    
+  links:
+    - master2:redis-master
+    - slave2

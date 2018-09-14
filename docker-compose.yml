@@ -1,0 +1,9 @@
+master1:
+  image: redis:3
+  container_name: play-with-redis-master1
+master2:
+  image: redis:3
+  container_name: play-with-redis-master2
+master3:
+  image: redis:3
+  container_name: play-with-redis-master3
